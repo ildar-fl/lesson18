@@ -5,7 +5,12 @@ class DonateForm {
     #input
     #button
 
-    constructor() {
+    constructor(totalAmount, addDonate) {
+        this.totalAmount = totalAmount;
+        this.addDonate = addDonate;
+
+        console.log(addDonate);
+
         this.#form = document.createElement('form');
         this.#title = document.createElement('h1');
         this.#inputContainer = document.createElement('label');
@@ -13,11 +18,24 @@ class DonateForm {
         this.#button = document.createElement('button');
     }
 
+    updateTotalAmount(newAmount) {
+        this.#title.textContent = `${newAmount}$`;  
+    }
+
+    createDonate(event) {
+        event.preventDefault();
+        
+        const amount = Number(event.target.amount.value.trim());
+        event.target.amount.value = '';
+        this.addDonate({ amount, date: new Date() });
+    }
+
     render() {
         this.#form.className='donate-form';
+        this.#form.addEventListener('submit', this.createDonate.bind(this));
         
         this.#title.id = 'total-amount';
-        this.#title.textContent = '28$';
+        this.#title.textContent = `${this.totalAmount}$`;
 
         this.#inputContainer.className = 'donate-form__input-label';
         this.#inputContainer.textContent = 'Введите сумму в $';

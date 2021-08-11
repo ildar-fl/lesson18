@@ -13,8 +13,23 @@ class App {
     #donateList
 
     constructor() {
-        this.#donateForm = new DonateForm();
-        this.#donateList = new DonaleList(mockDonates); 
+        this.state = {
+            donates: [],
+            totalAmount: 0,
+        }
+
+        this.#donateForm = new DonateForm(this.state.totalAmount, this.createNewDonate.bind(this));
+        this.#donateList = new DonaleList(this.state.donates); 
+    }
+
+    createNewDonate(newDonate) {
+        this.state = { 
+            donates: [...this.state.donates, newDonate], 
+            totalAmount: this.state.totalAmount + newDonate.amount 
+        };
+
+        this.#donateForm.updateTotalAmount(this.state.totalAmount);
+        this.#donateList.updateDonates(this.state.donates);
     }
 
     run() {

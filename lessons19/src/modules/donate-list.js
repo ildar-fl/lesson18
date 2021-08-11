@@ -20,6 +20,12 @@ class DonaleList {
         this.#donatesWrapper.className = 'donate-item';
     }
 
+    updateDonates(updatedDonates) {
+        const donates = updatedDonates.map(this.#createDonate);  
+        this.#donatesWrapper.textContent = '';
+        this.#donatesWrapper.append(...donates);
+    }
+
     #createDonate({ date, amount }) {
         const donateContainer = document.createElement('div');
         donateContainer.className = 'donate-item';
