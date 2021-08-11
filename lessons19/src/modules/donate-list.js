@@ -1,3 +1,4 @@
+import { Settings } from '../core/constants/settings';
 
 class DonaleList {
     #donatens
@@ -8,16 +9,9 @@ class DonaleList {
 
     constructor(donatens) {
         this.#donatens = donatens;
-
         this.#container = document.createElement('div');
-        this.#container.className = 'donates-container';
-
         this.#title = document.createElement('h2');
-        this.#title.className = 'donates-container__title';
-        this.#title.textContent = 'Список донатов';
-
         this.#donatesWrapper = document.createElement('div');
-        this.#donatesWrapper.className = 'donate-item';
     }
 
     updateDonates(updatedDonates) {
@@ -32,7 +26,7 @@ class DonaleList {
         donateContainer.textContent = date;
         
         const amountContainer = document.createElement('b');
-        amountContainer.textContent = `${amount}$`;
+        amountContainer.textContent = `${amount}${Settings.currency}`;
 
         donateContainer.append(amountContainer);
 
@@ -40,11 +34,16 @@ class DonaleList {
     }
 
     render() {
-      const donates = this.#donatens.map(this.#createDonate);
-      this.#donatesWrapper.append(...donates);
-      this.#container.append(this.#title, this.#donatesWrapper);  
+        this.#container.className = 'donates-container';
+        this.#title.className = 'donates-container__title';
+        this.#title.textContent = 'Список донатов';
+        this.#donatesWrapper.className = 'donate-item';
 
-      return this.#container;
+        const donates = this.#donatens.map(this.#createDonate);
+        this.#donatesWrapper.append(...donates);
+        this.#container.append(this.#title, this.#donatesWrapper);  
+
+        return this.#container;
     }
 }
 

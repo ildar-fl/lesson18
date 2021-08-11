@@ -1,3 +1,5 @@
+import { Settings as locale } from '../core/constants/settings';
+
 class DonateForm {
     #form
     #title
@@ -19,12 +21,12 @@ class DonateForm {
     }
 
     updateTotalAmount(newAmount) {
-        this.#title.textContent = `${newAmount}$`;  
+        this.#title.textContent = `${newAmount}${locale.currency}`;  
     }
 
     createDonate(event) {
         event.preventDefault();
-        
+
         const amount = Number(event.target.amount.value.trim());
         event.target.amount.value = '';
         this.addDonate({ amount, date: new Date() });
@@ -35,10 +37,10 @@ class DonateForm {
         this.#form.addEventListener('submit', this.createDonate.bind(this));
         
         this.#title.id = 'total-amount';
-        this.#title.textContent = `${this.totalAmount}$`;
+        this.#title.textContent = `${this.totalAmount}${locale.currency}`;
 
         this.#inputContainer.className = 'donate-form__input-label';
-        this.#inputContainer.textContent = 'Введите сумму в $';
+        this.#inputContainer.textContent = `Введите сумму в ${locale.currency}`;
 
         this.#input.className = 'donate-form__donate-input';
         this.#input.name = 'amount';
