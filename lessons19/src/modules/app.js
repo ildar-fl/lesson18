@@ -1,5 +1,6 @@
 import { DonateForm } from './donate-form';
 import { DonaleList } from './donate-list';
+import * as utils from '../core/utils/index';
 
 const mockDonates = [
     { amount: 4, date: new Date() },
@@ -14,8 +15,8 @@ class App {
 
     constructor() {
         this.state = {
-            donates: [],
-            totalAmount: 0,
+            donates: mockDonates,
+            totalAmount: utils.calculateSumOfNumbers(mockDonates.map(({amount}) => amount)),
         }
 
         this.#donateForm = new DonateForm(this.state.totalAmount, this.createNewDonate.bind(this));

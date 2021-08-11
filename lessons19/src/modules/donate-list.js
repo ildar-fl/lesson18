@@ -1,4 +1,5 @@
 import { Settings } from '../core/constants/settings';
+import * as utils from '../core/utils/index';
 
 class DonaleList {
     #donatens
@@ -23,10 +24,10 @@ class DonaleList {
     #createDonate({ date, amount }) {
         const donateContainer = document.createElement('div');
         donateContainer.className = 'donate-item';
-        donateContainer.textContent = date;
+        donateContainer.textContent = utils.getFormattedTime(date);
         
         const amountContainer = document.createElement('b');
-        amountContainer.textContent = `${amount}${Settings.currency}`;
+        amountContainer.textContent = ` - ${amount}${Settings.currency}`;
 
         donateContainer.append(amountContainer);
 
