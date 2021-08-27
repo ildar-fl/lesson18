@@ -10,20 +10,20 @@ const Users = () => {
 
   const renderPhrase = (number) => {
     if (number === 0) {
-      return <span class="badge bg-danger">Никто с тобой не тусанет</span>;
+      return <span className="badge bg-danger">Никто с тобой не тусанет</span>;
     }
 
     const countString =
       number === 1 ? "1 человек тусанёт" : `${number} человек тусанут`;
 
-    return <span class="badge bg-info">{countString} с тобой чегодня</span>;
+    return <span className="badge bg-info">{countString} с тобой чегодня</span>;
   };
 
   return (
     <>
       <h1>{renderPhrase(users.length)}</h1>
       {users.length > 0 && (
-        <table class="table">
+        <table className="table">
           <thead>
             <tr>
               <th scope="col">Имя</th>
@@ -49,7 +49,7 @@ const Users = () => {
                     <th scope="row">{name}</th>
                     <td>
                       {qualities.map(({ _id: badgeId, name, color }) => (
-                        <span key={badgeId} class={`badge bg-${color}`}>
+                        <span key={badgeId} className={`badge bg-${color}`}>
                           {name}
                         </span>
                       ))}
