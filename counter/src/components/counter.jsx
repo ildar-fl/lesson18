@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 
-const Counter = () => {
-  const [count, setCount] = useState(0);
-
+const Counter = ({ id, value, name, onDelete, onIncrement, onDecrement }) => {
   const formCount = () => {
-    return count === 0 ? "Zero" : count;
+    return value === 0 ? "Zero" : value;
   };
 
   const styles = {
@@ -14,29 +12,36 @@ const Counter = () => {
 
   const getBadgesClasses = () => {
     let classes = "badge m-2 bg-";
-    classes += count === 0 ? "danger" : "primary";
+    classes += value === 0 ? "danger" : "primary";
     return classes;
   };
 
   return (
-    <>
+    <div>
+      <h4>{name}</h4>
       <span style={styles} className={getBadgesClasses()}>
         {formCount()}
       </span>
       <button
-        onClick={() => setCount((prev) => prev + 1)}
+        onClick={() => onIncrement(id)}
         className="btn btn-secondary btn-sm"
       >
         Increment
       </button>
       <button
-        disabled={count === 0}
-        onClick={() => setCount((prev) => prev - 1)}
+        disabled={value === 0}
+        onClick={() => onDecrement(id)}
         className="btn btn-secondary btn-sm"
       >
         Decrement
       </button>
-    </>
+      <button
+        className="btn btn-danger btn-sm m-2"
+        onClick={() => onDelete(id)}
+      >
+        Delete
+      </button>
+    </div>
   );
 };
 
