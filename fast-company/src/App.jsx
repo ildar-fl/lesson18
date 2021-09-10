@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import SearchStatus from "./components/searchStatus";
 import Users from "./components/users";
 import api from "./api";
 
@@ -20,14 +19,11 @@ const App = () => {
     };
 
     return (
-        <React.Fragment>
-            <SearchStatus totalItems={users.length} />
-            <Users
-                users={users}
-                onDelete={handleDelete}
-                onToggleFavorite={handleToggleFavorite}
-            />
-        </React.Fragment>
+        <Users
+            users={users}
+            onDelete={handleDelete}
+            onToggleFavorite={handleToggleFavorite}
+        />
     );
 };
 
