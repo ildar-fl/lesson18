@@ -15,7 +15,7 @@ const Users = ({ users: allUsers, ...rest }) => {
     const [professions, setProfessions] = useState();
 
     const filteredUsers = selectedProf
-        ? allUsers.filter(({ profession }) => selectedProf === profession)
+        ? allUsers.filter(({ profession: { _id } }) => selectedProf._id === _id)
         : allUsers;
     const countUses = filteredUsers.length;
     const userCrop = paginate(filteredUsers, currentPage, pageSize);
