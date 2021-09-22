@@ -16,18 +16,23 @@ const TableHeader = ({ selectedSort, columns, onSort }) => {
     return (
         <thead>
             <tr>
-                {Object.keys(columns).map((key) => (
+                {Object.entries(columns).map(([key, { path, name }]) => (
                     <th
                         key={key}
-                        {...{ role: columns[key].path && "button" }}
-                        onClick={
-                            columns[key].path
-                                ? () => handleSort(columns[key].path)
-                                : undefined
-                        }
+                        {...{ role: path && "button" }}
+                        onClick={path ? () => handleSort(path) : undefined}
                         scope="col"
                     >
-                        {columns[key].name}
+                        {name}
+                        {selectedSort.path === path && (
+                            <i
+                                className={`bi ${
+                                    selectedSort.order === "asc"
+                                        ? "bi-caret-up-fill"
+                                        : "bi-caret-down-fill"
+                                }`}
+                            ></i>
+                        )}
                     </th>
                 ))}
             </tr>
