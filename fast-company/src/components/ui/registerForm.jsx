@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
+import SelectField from "../common/form/selectField";
 import { validator } from "../../utils/validator";
+import api from "../../api";
 
 const validatorConfig = {
     email: {
@@ -23,14 +25,19 @@ const validatorConfig = {
             message: "Пароль должен состоять минимум из 8-ми символов",
             value: 8
         }
+    },
+    profession: {
+        isRequired: { message: "Профессия должна быть выбрана" }
     }
 };
 
-function LoginForm() {
+export default function RegisterForm() {
     const [data, setData] = useState({
         email: "",
-        password: ""
+        password: "",
+        profession: ""
     });
+    const [professions, setProfessions] = useState();
     const [errors, setErrors] = useState({});
 
     const handleDataChange = ({ name, value }) => {
@@ -40,6 +47,10 @@ function LoginForm() {
     useEffect(() => {
         validate();
     }, [data]);
+
+    useEffect(() => {
+        api.professions.fetchAll().then((data) => setProfessions(data));
+    }, []);
 
     const validate = () => {
         const errors = validator(data, validatorConfig);
@@ -58,7 +69,7 @@ function LoginForm() {
         console.log(e);
     };
 
-    const { email, password } = data;
+    const { email, password, profession } = data;
 
     return (
         <form onSubmit={handleSubmit}>
@@ -77,6 +88,14 @@ function LoginForm() {
                 error={errors.password}
                 onChange={handleDataChange}
             />
+            <SelectField
+                label="Profession"
+                name="profession"
+                value={profession}
+                error={errors.profession}
+                options={professions}
+                onChange={handleDataChange}
+            />
             <button
                 type="submit"
                 disabled={!isValid}
@@ -87,5 +106,3 @@ function LoginForm() {
         </form>
     );
 }
-
-export default LoginForm;
