@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
-import api from "../api";
-import Qualitie from "../components/qualitie";
+import api from "../../../api";
+import Qualitie from "../../ui/qualitie";
 
-const User = ({ match, history }) => {
+const UserPage = ({ userId }) => {
+    const history = useHistory();
     const [user, setUser] = useState();
-    const { userId } = match.params;
+
+    console.log(userId);
 
     useEffect(() => {
         api.users.getById(userId).then((data) => setUser(data));
@@ -31,9 +34,8 @@ const User = ({ match, history }) => {
     );
 };
 
-User.propTypes = {
-    match: PropTypes.object,
-    history: PropTypes.object
+UserPage.propTypes = {
+    userId: PropTypes.string
 };
 
-export default User;
+export default UserPage;

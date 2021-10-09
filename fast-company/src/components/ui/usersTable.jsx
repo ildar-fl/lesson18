@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import BookMark from "./bookmark";
 import Qualitie from "./qualitie";
-import Table from "./table";
-import { Link } from "react-router-dom";
+import Table from "../common/table/table";
 
 const UsersTable = ({
     users,

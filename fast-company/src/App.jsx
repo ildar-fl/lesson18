@@ -3,8 +3,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import Users from "./layouts/users";
 import Login from "./layouts/login";
 import Main from "./layouts/main";
-import User from "./layouts/user";
-import NavBar from "./components/navBar";
+import NavBar from "./components/ui/navBar";
 
 const App = () => {
     return (
@@ -13,8 +12,7 @@ const App = () => {
             <Switch>
                 <Route exact path="/" component={Main} />
                 <Route path="/login" component={Login} />
-                <Route exact path="/users" component={Users} />
-                <Route path="/users/:userId" component={User} />
+                <Route path={["/users/:userId", "/users"]} component={Users} />
             </Switch>
         </BrowserRouter>
     );
