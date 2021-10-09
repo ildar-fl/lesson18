@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
-const TextField = ({ label, type, name, value, error, onChange }) => {
+const TextField = ({
+    label,
+    placeholder,
+    type,
+    name,
+    value,
+    error,
+    onChange
+}) => {
     const [showPassword, setShowPassword] = useState(false);
 
     const getInputClasses = () => {
@@ -12,6 +20,8 @@ const TextField = ({ label, type, name, value, error, onChange }) => {
         setShowPassword((prev) => !prev);
     };
 
+    const handleChange = ({ target }) => onChange(target);
+
     return (
         <div className="mb-4">
             <label htmlFor={name}>{label}</label>
@@ -19,10 +29,11 @@ const TextField = ({ label, type, name, value, error, onChange }) => {
                 <input
                     className={getInputClasses()}
                     type={showPassword ? "text" : type}
+                    placeholder={placeholder}
                     id={name}
                     name={name}
                     value={value}
-                    onChange={onChange}
+                    onChange={handleChange}
                 />
                 {type === "password" && (
                     <button
@@ -50,6 +61,7 @@ TextField.defaultProps = {
 TextField.propTypes = {
     label: PropTypes.string,
     type: PropTypes.string,
+    placeholder: PropTypes.string,
     name: PropTypes.string,
     value: PropTypes.string,
     error: PropTypes.string,

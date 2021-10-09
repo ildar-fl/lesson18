@@ -33,8 +33,8 @@ const Login = () => {
     });
     const [errors, setErrors] = useState({});
 
-    const handleDataChange = ({ target }) => {
-        setData((prev) => ({ ...prev, [target.name]: target.value }));
+    const handleDataChange = ({ name, value }) => {
+        setData((prev) => ({ ...prev, [name]: value }));
     };
 
     useEffect(() => {
