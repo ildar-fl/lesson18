@@ -7,25 +7,35 @@ function RadioField({ name, label, value, options, onChange }) {
     return (
         <div className="mb-4">
             <label className="mr-4">{label}</label>
-            {options.map(({ name: optionName, value: optionValue }, index) => {
-                const id = `${optionName}_${optionValue}`;
-                return (
-                    <div key={index} className="form-check form-check-inline">
-                        <input
-                            className="form-check-input"
-                            type="radio"
-                            name={name}
-                            id={id}
-                            checked={optionValue === value}
-                            value={optionValue}
-                            onChange={handleChange}
-                        />
-                        <label className="form-check-label" htmlFor={id}>
-                            {optionName}
-                        </label>
-                    </div>
-                );
-            })}
+            <div>
+                {options.map(
+                    ({ name: optionName, value: optionValue }, index) => {
+                        const id = `${optionName}_${optionValue}`;
+                        return (
+                            <div
+                                key={index}
+                                className="form-check form-check-inline"
+                            >
+                                <input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name={name}
+                                    id={id}
+                                    checked={optionValue === value}
+                                    value={optionValue}
+                                    onChange={handleChange}
+                                />
+                                <label
+                                    className="form-check-label"
+                                    htmlFor={id}
+                                >
+                                    {optionName}
+                                </label>
+                            </div>
+                        );
+                    }
+                )}
+            </div>
         </div>
     );
 }

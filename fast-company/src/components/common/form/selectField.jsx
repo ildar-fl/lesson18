@@ -10,6 +10,14 @@ function SelectField({
     options,
     onChange
 }) {
+    const optionsArray =
+        !Array.isArray(options) && typeof options === "object"
+            ? Object.values(options).map(({ _id, name }) => ({
+                  _id,
+                  name
+              }))
+            : options;
+
     const getSelectClasses = () => {
         return "form-select" + (error ? " is-invalid" : "");
     };
@@ -33,7 +41,7 @@ function SelectField({
                 <option selected={value === ""} value="">
                     Choose...
                 </option>
-                {options?.map(({ _id, name }) => (
+                {optionsArray?.map(({ _id, name }) => (
                     <option key={_id} selected={_id === value} value={_id}>
                         {name}
                     </option>
