@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import TextField from "../common/form/textField";
+import CheckBoxField from "../common/form/checkBoxField";
 import { validator } from "../../utils/validator";
 
 const validatorConfig = {
@@ -29,7 +30,8 @@ const validatorConfig = {
 function LoginForm() {
     const [data, setData] = useState({
         email: "",
-        password: ""
+        password: "",
+        stayOn: false
     });
     const [errors, setErrors] = useState({});
 
@@ -77,6 +79,13 @@ function LoginForm() {
                 error={errors.password}
                 onChange={handleDataChange}
             />
+            <CheckBoxField
+                name="stayOn"
+                value={data.stayOn}
+                onChange={handleDataChange}
+            >
+                Оставаться в системе
+            </CheckBoxField>
             <button
                 type="submit"
                 disabled={!isValid}

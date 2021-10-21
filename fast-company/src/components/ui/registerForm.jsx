@@ -3,6 +3,7 @@ import TextField from "../common/form/textField";
 import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radioField";
 import MultiSelectField from "../common/form/multiSelectField";
+import CheckBoxField from "../common/form/checkBoxField";
 import { validator } from "../../utils/validator";
 import api from "../../api";
 
@@ -30,6 +31,12 @@ const validatorConfig = {
     },
     profession: {
         isRequired: { message: "Профессия должна быть выбрана" }
+    },
+    licence: {
+        isRequired: {
+            message:
+                "Вы не можете использовать наш сервис без подтверждения лицензионного соглашения"
+        }
     }
 };
 
@@ -39,6 +46,7 @@ export default function RegisterForm() {
         password: "",
         profession: "",
         sex: "male",
+        licence: false,
         qualities: []
     });
     const [qualities, setQualities] = useState({});
@@ -120,6 +128,14 @@ export default function RegisterForm() {
                 options={qualities}
                 onChange={handleDataChange}
             />
+            <CheckBoxField
+                name="licence"
+                value={data.licence}
+                error={errors.licence}
+                onChange={handleDataChange}
+            >
+                Подтвердить <a>лицензионное соглашение</a>
+            </CheckBoxField>
             <button
                 type="submit"
                 disabled={!isValid}
