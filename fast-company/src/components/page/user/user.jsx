@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import PropTypes from "prop-types";
 import api from "../../../api";
 import Qualitie from "../../ui/qualitie";
 
-const UserPage = ({ userId }) => {
+const UserPage = () => {
+    const { userId } = useParams();
     const history = useHistory();
     const [user, setUser] = useState();
-
-    console.log(userId);
 
     useEffect(() => {
         api.users.getById(userId).then((data) => setUser(data));
     }, [userId]);
-
-    console.log(userId, user);
 
     if (!user) {
         return "loading";
@@ -27,8 +24,8 @@ const UserPage = ({ userId }) => {
             <div>{user.qualities.map(Qualitie)}</div>
             <p>completedMeetings: {user.completedMeetings}</p>
             <p>rate: {user.rate}</p>
-            <button onClick={() => history.push("/users")}>
-                Все пользователи
+            <button onClick={() => history.push(`/users/${userId}/edit`)}>
+                Изменить
             </button>
         </React.Fragment>
     );

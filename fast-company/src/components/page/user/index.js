@@ -1,2 +1,3 @@
 import UserPage from "./user";
-export default UserPage;
+import UserForm from "./userForm";
+export { UserPage, UserForm };

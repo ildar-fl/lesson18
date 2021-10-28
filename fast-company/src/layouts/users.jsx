@@ -1,12 +1,14 @@
 import React from "react";
-import { useParams } from "react-router-dom";
-import UserPage from "../components/page/user";
+import { Switch, Route } from "react-router-dom";
+import { UserPage, UserForm } from "../components/page/user";
 import UsersListPage from "../components/page/usersList";
 
 export default function Users() {
-    const { userId } = useParams();
-
-    console.log(userId);
-
-    return userId ? <UserPage userId={userId} /> : <UsersListPage />;
+    return (
+        <Switch>
+            <Route path="/users/:userId/edit" component={UserForm} />
+            <Route path="/users/:userId" component={UserPage} />
+            <Route path="/users" component={UsersListPage} />
+        </Switch>
+    );
 }
