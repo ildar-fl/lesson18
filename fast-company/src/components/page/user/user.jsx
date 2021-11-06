@@ -28,6 +28,13 @@ const UserPage = () => {
 
     const handleSubmitComment = (event) => {
         event.preventDefault();
+        api.comments
+            .add({
+                userId: dataComment.user,
+                pageId: userId,
+                content: dataComment.comment
+            })
+            .then((data) => setComments((prev) => [...prev, data]));
     };
 
     const handleRemoveComment = async (commentId) => {
@@ -40,6 +47,8 @@ const UserPage = () => {
     if (!user) {
         return "loading";
     }
+
+    const isValid = dataComment.user && !!dataComment.comment;
 
     return (
         <div className="container">
@@ -161,8 +170,9 @@ const UserPage = () => {
                                 <button
                                     type="submit"
                                     className="btn btn-primary"
+                                    disabled={!isValid}
                                 >
-                                    Отправить
+                                    Опубликовать
                                 </button>
                             </form>
                         </div>
