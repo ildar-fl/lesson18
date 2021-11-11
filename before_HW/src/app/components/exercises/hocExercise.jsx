@@ -1,5 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 import CollapseWrapper from "../common/collapse";
+import CardWrapper from "../common/Card";
+
+function SimpleComponent({ isAuth, onLogin, onLogOut }) {
+    return isAuth ? (
+        <button className="btn btn-secondary" onClick={onLogOut}>
+            Выйти из системы
+        </button>
+    ) : (
+        <button className="btn btn-primary" onClick={onLogin}>
+            Войти
+        </button>
+    );
+}
+
+SimpleComponent.propTypes = {
+    isAuth: PropTypes.bool.isRequired,
+    onLogin: PropTypes.func.isRequired,
+    onLogOut: PropTypes.func.isRequired
+};
+
+const withLogin = (Component) => () => {
+    const [isAuth, setAuth] = useState(!!localStorage.getItem("user"));
+
+    const handleLogin = () => {
+        localStorage.setItem("user", "login");
+        setAuth(true);
+    };
+
+    const handleLogOut = () => {
+        localStorage.removeItem("user");
+        setAuth(false);
+    };
+
+    return (
+        <CardWrapper>
+            <Component
+                isAuth={isAuth}
+                onLogOut={handleLogOut}
+                onLogin={handleLogin}
+            />
+        </CardWrapper>
+    );
+};
+
+const SimpleComponentWithHOC = withLogin(SimpleComponent);
 
 const HocExercise = () => {
     return (
@@ -47,6 +93,7 @@ const HocExercise = () => {
                     <code>user</code> в <code>localStorage</code>
                 </li>
             </ul>
+            <SimpleComponentWithHOC />
         </CollapseWrapper>
     );
 };
