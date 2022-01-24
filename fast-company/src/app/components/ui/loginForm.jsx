@@ -12,6 +12,7 @@ const LoginForm = () => {
         password: "",
         stayOn: false
     });
+    const from = history.location.state?.from?.pathname;
     const { signIn } = useAuth();
     const [errors, setErrors] = useState({});
     const handleChange = (target) => {
@@ -64,11 +65,12 @@ const LoginForm = () => {
         console.log(data);
         try {
             await signIn(data);
-            history.push("/users");
+            history.push(from ?? "/users");
         } catch (error) {
             setErrors(error);
         }
     };
+
     return (
         <form onSubmit={handleSubmit}>
             <TextField

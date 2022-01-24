@@ -10,10 +10,57 @@ import { useQualities } from "../../hooks/useQualities";
 import { useProfessions } from "../../hooks/useProfessions";
 import { useAuth } from "../../hooks/useAuth";
 
+const validatorConfog = {
+    email: {
+        isRequired: {
+            message: "Электронная почта обязательна для заполнения"
+        },
+        isEmail: {
+            message: "Email введен некорректно"
+        }
+    },
+    name: {
+        isRequired: {
+            message: "Имя обязательно для заполнения"
+        },
+        min: {
+            message: "Имя должно состоять как минимум из 3х символов",
+            value: 3
+        }
+    },
+    password: {
+        isRequired: {
+            message: "Пароль обязательна для заполнения"
+        },
+        isCapitalSymbol: {
+            message: "Пароль должен содержать хотя бы одну заглавную букву"
+        },
+        isContainDigit: {
+            message: "Пароль должен содержать хотя бы одно число"
+        },
+        min: {
+            message: "Пароль должен состаять миниму из 8 символов",
+            value: 8
+        }
+    },
+    profession: {
+        isRequired: {
+            message: "Обязательно выберите вашу профессию"
+        }
+    },
+    licence: {
+        isRequired: {
+            message:
+                "Вы не можете использовать наш сервис без подтреврждения лицензионного соглашения"
+        }
+    }
+};
+
 const RegisterForm = () => {
     const history = useHistory();
     const [data, setData] = useState({
         email: "",
+        name: "",
         password: "",
         profession: "",
         sex: "male",
@@ -39,43 +86,6 @@ const RegisterForm = () => {
             ...prevState,
             [target.name]: target.value
         }));
-    };
-
-    const validatorConfog = {
-        email: {
-            isRequired: {
-                message: "Электронная почта обязательна для заполнения"
-            },
-            isEmail: {
-                message: "Email введен некорректно"
-            }
-        },
-        password: {
-            isRequired: {
-                message: "Пароль обязательна для заполнения"
-            },
-            isCapitalSymbol: {
-                message: "Пароль должен содержать хотя бы одну заглавную букву"
-            },
-            isContainDigit: {
-                message: "Пароль должен содержать хотя бы одно число"
-            },
-            min: {
-                message: "Пароль должен состаять миниму из 8 символов",
-                value: 8
-            }
-        },
-        profession: {
-            isRequired: {
-                message: "Обязательно выберите вашу профессию"
-            }
-        },
-        licence: {
-            isRequired: {
-                message:
-                    "Вы не можете использовать наш сервис без подтреврждения лицензионного соглашения"
-            }
-        }
     };
 
     useEffect(() => {
@@ -113,6 +123,13 @@ const RegisterForm = () => {
                 value={data.email}
                 onChange={handleChange}
                 error={errors.email}
+            />
+            <TextField
+                label="Имя"
+                name="name"
+                value={data.name}
+                onChange={handleChange}
+                error={errors.name}
             />
             <TextField
                 label="Пароль"

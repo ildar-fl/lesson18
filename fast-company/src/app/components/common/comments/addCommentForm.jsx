@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
-import API from "../../../api";
-import SelectField from "../form/selectField";
-import TextAreaField from "../form/textAreaField";
-import { validator } from "../../../utils/validator";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
-const initialData = { userId: "", content: "" };
+import TextAreaField from "../form/textAreaField";
+import TextField from "../form/textField";
+import { validator } from "../../../utils/validator";
+import { useAuth } from "../../../hooks/useAuth";
+
+const initialData = { content: "" };
 
 const AddCommentForm = ({ onSubmit }) => {
+    const { user } = useAuth();
     const [data, setData] = useState(initialData);
-    const [users, setUsers] = useState({});
     const [errors, setErrors] = useState({});
     const handleChange = (target) => {
         setData((prevState) => ({
@@ -16,12 +17,7 @@ const AddCommentForm = ({ onSubmit }) => {
             [target.name]: target.value
         }));
     };
-    const validatorConfog = {
-        userId: {
-            isRequired: {
-                message: "Выберите от чьего имени вы хотите отправить сообщение"
-            }
-        },
+    const validatorConfig = {
         content: {
             isRequired: {
                 message: "Сообщение не может быть пустым"
@@ -30,14 +26,12 @@ const AddCommentForm = ({ onSubmit }) => {
     };
 
     const validate = () => {
-        const errors = validator(data, validatorConfog);
+        const errors = validator(data, validatorConfig);
 
         setErrors(errors);
         return Object.keys(errors).length === 0;
     };
-    useEffect(() => {
-        API.users.fetchAll().then(setUsers);
-    }, []);
+
     const clearForm = () => {
         setData(initialData);
         setErrors({});
@@ -49,24 +43,12 @@ const AddCommentForm = ({ onSubmit }) => {
         onSubmit(data);
         clearForm();
     };
-    const arrayOfUsers =
-        users &&
-        Object.keys(users).map((userId) => ({
-            name: users[userId].name,
-            value: users[userId]._id
-        }));
+
     return (
         <div>
             <h2>New comment</h2>
             <form onSubmit={handleSubmit}>
-                <SelectField
-                    onChange={handleChange}
-                    options={arrayOfUsers}
-                    name="userId"
-                    value={data.userId}
-                    defaultOption="Выберите пользователя"
-                    error={errors.userId}
-                />
+                <TextField disabled value={user.name} />
                 <TextAreaField
                     value={data.content}
                     onChange={handleChange}

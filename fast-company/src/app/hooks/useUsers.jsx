@@ -19,6 +19,10 @@ const UserProvider = ({ children }) => {
         setErrors(message);
     }, []);
 
+    function getUserById(userId) {
+        return users.find(({ _id }) => _id === userId);
+    }
+
     useEffect(() => {
         const getUsers = async () => {
             try {
@@ -42,7 +46,7 @@ const UserProvider = ({ children }) => {
     }, [errors]);
 
     return (
-        <UserContext.Provider value={{ users }}>
+        <UserContext.Provider value={{ users, getUserById }}>
             {isLoading ? <h1>Users loading</h1> : children}
         </UserContext.Provider>
     );

@@ -4,17 +4,29 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import userService from "../services/user.service";
 import localStorageService from "../services/localStorage.service";
+import { useHistory } from "react-router-dom";
 
-const httpAuth = axios.create();
+const httpAuth = axios.create({
+    baseURL: "https://identitytoolkit.googleapis.com/v1/",
+    params: {
+        key: process.env.REACT_APP_FIREBASE_KEY
+    }
+});
 const AuthContext = React.createContext();
 
 const useAuth = () => {
     return useContext(AuthContext);
 };
 
+const randomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min + 1) + min);
+};
+
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState();
     const [errors, setErrors] = useState(null);
+    const [isLoading, setLoading] = useState(true);
+    const history = useHistory();
 
     const catchErrors = (error) => {
         const { message } = error.response.data;
@@ -24,6 +36,7 @@ const AuthProvider = ({ children }) => {
     async function createUser(data) {
         try {
             const { content } = await userService.create(data);
+            console.log(content);
             setUser(content);
         } catch (error) {
             const { code, message } = error.response.data.error;
@@ -40,7 +53,7 @@ const AuthProvider = ({ children }) => {
     }
 
     async function signUp({ email, password, ...other }) {
-        const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.REACT_APP_FIREBASE_KEY}`;
+        const url = `accounts:signUp`;
         try {
             const { data } = await httpAuth.post(url, {
                 email,
@@ -48,14 +61,25 @@ const AuthProvider = ({ children }) => {
                 returnSecureToken: true
             });
             localStorageService.setToken(data);
-            await createUser({ _id: data.localId, email, ...other });
+            await createUser({
+                _id: data.localId,
+                email,
+                rate: randomInt(1, 5),
+                completedMeetings: randomInt(0, 200),
+                image: `https://avatars.dicebear.com/api/avataaars/${(
+                    Math.random() + 1
+                )
+                    .toString(36)
+                    .substring(7)}.svg`,
+                ...other
+            });
         } catch (error) {
             catchErrors(error);
         }
     }
 
     async function signIn({ email, password }) {
-        const url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_FIREBASE_KEY}`;
+        const url = `accounts:signInWithPassword`;
         try {
             const { data } = await httpAuth.post(url, {
                 email,
@@ -63,6 +87,7 @@ const AuthProvider = ({ children }) => {
                 returnSecureToken: true
             });
             localStorageService.setToken(data);
+            await getUserDate();
         } catch (error) {
             const { code, message } = error.response.data.error;
             if (code === 400) {
@@ -84,6 +109,31 @@ const AuthProvider = ({ children }) => {
         }
     }
 
+    async function logOut() {
+        localStorageService.removeAuthData();
+        setUser(null);
+        history.push("/");
+    }
+
+    async function getUserDate() {
+        try {
+            const { content } = await userService.getCurrentUser();
+            setUser(content);
+        } catch (error) {
+            catchErrors(error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        if (localStorageService.getAccessToken()) {
+            getUserDate();
+        } else {
+            setLoading(false);
+        }
+    }, []);
+
     useEffect(() => {
         if (!errors) {
             toast.error(errors);
@@ -92,8 +142,8 @@ const AuthProvider = ({ children }) => {
     }, [errors]);
 
     return (
-        <AuthContext.Provider value={{ user, errors, signUp, signIn }}>
-            {children}
+        <AuthContext.Provider value={{ user, errors, signUp, signIn, logOut }}>
+            {isLoading ? "Loading..." : children}
         </AuthContext.Provider>
     );
 };
@@ -105,4 +155,4 @@ AuthProvider.propTypes = {
     ])
 };
 
-export { AuthProvider, useAuth };
+export { AuthProvider, useAuth, httpAuth };
