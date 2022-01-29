@@ -10,6 +10,7 @@ import { ProfessionsProvider } from "./hooks/useProfessions";
 import { QualitiesProvider } from "./hooks/useQualities";
 import { AuthProvider } from "./hooks/useAuth";
 import ProtectedRoute from "./components/common/protectedRoute";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
     return (
