@@ -6,9 +6,16 @@ import SelectField from "../../common/form/selectField";
 import RadioField from "../../common/form/radio.Field";
 import MultiSelectField from "../../common/form/multiSelectField";
 import BackHistoryButton from "../../common/backButton";
-import { useProfessions } from "../../../hooks/useProfessions";
-import { useQualities } from "../../../hooks/useQualities";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import {
+    getQualities,
+    getQualitiesStateLoading
+} from "../../../store/qualities";
+import {
+    getProfessions,
+    getStateLoadingProfessions
+} from "../../../store/professions";
 
 const validatorConfig = {
     email: {
@@ -45,16 +52,18 @@ const EditUserPage = () => {
     });
 
     const { user, updateUser } = useAuth();
-    const { isLoading: isLoadingProfessions, professions } = useProfessions();
-    const {
-        isLoading: isLoadingQualities,
-        qualities,
-        getQuality
-    } = useQualities();
+    const isLoadingProfessions = useSelector(getStateLoadingProfessions);
+    const professions = useSelector(getProfessions);
+    const isLoadingQualities = useSelector(getQualitiesStateLoading);
+    const qualities = useSelector(getQualities);
 
     const isLoadingOptions = isLoadingProfessions || isLoadingQualities;
     const qualitiesOption = qualities.map(itemToOption);
     const professionsOption = professions.map(itemToOption);
+
+    const getQuality = (id) => {
+        return qualities.find(({ _id }) => _id === id);
+    };
 
     useEffect(() => {
         if (!isLoadingOptions) {

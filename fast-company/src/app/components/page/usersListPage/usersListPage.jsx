@@ -7,8 +7,12 @@ import SearchStatus from "../../ui/searchStatus";
 import UserTable from "../../ui/usersTable";
 import _ from "lodash";
 import { useUser } from "../../../hooks/useUsers";
-import { useProfessions } from "../../../hooks/useProfessions";
 import { useAuth } from "../../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import {
+    getProfessions,
+    getStateLoadingProfessions
+} from "../../../store/professions";
 
 const UsersListPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -19,8 +23,8 @@ const UsersListPage = () => {
 
     const { users } = useUser();
     const { user: currentUser } = useAuth();
-    const { isLoading: professionsLoading, professions } = useProfessions();
-
+    const isLoadingProfessions = useSelector(getStateLoadingProfessions);
+    const professions = useSelector(getProfessions);
     const handleToggleBookMark = (id) => {
         const newArray = users.map((user) => {
             if (user._id === id) {
@@ -81,7 +85,7 @@ const UsersListPage = () => {
 
     return (
         <div className="d-flex">
-            {professions && !professionsLoading && (
+            {professions && !isLoadingProfessions && (
                 <div className="d-flex flex-column flex-shrink-0 p-3">
                     <GroupList
                         selectedItem={selectedProf}

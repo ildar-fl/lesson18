@@ -6,9 +6,10 @@ import SelectField from "../common/form/selectField";
 import RadioField from "../common/form/radio.Field";
 import MultiSelectField from "../common/form/multiSelectField";
 import CheckBoxField from "../common/form/checkBoxField";
-import { useQualities } from "../../hooks/useQualities";
-import { useProfessions } from "../../hooks/useProfessions";
 import { useAuth } from "../../hooks/useAuth";
+import { useSelector } from "react-redux";
+import { getQualities } from "../../store/qualities";
+import { getProfessions } from "../../store/professions";
 
 const validatorConfog = {
     email: {
@@ -67,8 +68,8 @@ const RegisterForm = () => {
         qualities: [],
         licence: false
     });
-    const { qualities } = useQualities();
-    const { professions } = useProfessions();
+    const qualities = useSelector(getQualities);
+    const professions = useSelector(getProfessions);
     const { signUp } = useAuth();
     const [errors, setErrors] = useState({});
 
